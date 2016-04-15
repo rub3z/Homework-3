@@ -14,25 +14,43 @@ public class MovieReviewSentimentAnalysis {
       Scanner input = new Scanner(System.in);
       
       System.out.println("Simon Cowell up in this bitch nigga!");
-      String userIn = input.nextLine();
+      String userInput = input.nextLine();
     		  
-      String[] reviews = new String[20];
-      int[] reviewScores = new int[20];
+      String[] reviews = new String[100];
+      int[] reviewScores = new int[100];
       
       MovieReviewReader.readMovieReviews( "movie_reviews.txt" , reviews , reviewScores );
       
-      //System.out.println(reviews[12]);
-      //System.out.println(reviewScores[12]);
+//      String endString = userInput.replaceAll( userInput.substring( 3 , 3 ) , "LOL" );
+//      
+//      System.out.println( endString );
+
       
-      String[] words = userIn.split(" ");
-       
-      
-      for ( int i = 0; i < words.length; i++ )
-          System.out.println( words[i] );
-     
+      String[] words = formatReview( userInput );
+
+      input.close();    
    }
    
-   
-}
+   public static String[] formatReview( String userReview )
+   {
+	   userReview.toLowerCase();
+	   
+	   String noPunctuationReview = "";
+	     
+	   for( int i = 0; i < userReview.length() ; i++ ) {
+			   System.out.print( userReview.substring( i , i + 1 ) + "- "  );
 
+			   if( !Character.isLetter(userReview.charAt(i)) 
+				&& !Character.isWhitespace(userReview.charAt(i))) {
+				   noPunctuationReview =
+				   userReview.replaceAll( userReview.substring( i , i + 1 ) , "" );
+				   userReview = noPunctuationReview;
+			   }
+			   System.out.println( userReview.substring( i , i + 1 ) + "- "  );
+		   }
+		   System.out.println( userReview );
+	   
+	   return noPunctuationReview.split(" ");
+   }
+}
 
