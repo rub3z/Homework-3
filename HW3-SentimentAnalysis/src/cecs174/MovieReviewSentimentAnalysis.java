@@ -14,44 +14,91 @@ public class MovieReviewSentimentAnalysis {
       Scanner input = new Scanner(System.in);
       
       System.out.println("Simon Cowell up in this bitch nigga!");
-      String userInput = input.nextLine();
+      String userReview = input.nextLine();
     		  
-      String[] reviews = new String[100];
-      int[] reviewScores = new int[100];
+      String[] movieReviews = new String[10];
+      int[] movieReviewScores = new int[10];
       
-      MovieReviewReader.readMovieReviews( "movie_reviews.txt" , reviews , reviewScores );
+      MovieReviewReader.readMovieReviews( "movie_reviews.txt" , movieReviews , movieReviewScores );
+//    String[] formattedReview = new String[500];  
+//          
+//      for(int i = 0; i < formattedReview.length ; i++) {
+//    	  formattedReview = formatReview(reviews[i]);
+//    	  
+//    	  System.out.println();
+//      }
+//		All of this is here to test out the formatReview method on the movieReviews.txt file      
       
-//      String endString = userInput.replaceAll( userInput.substring( 3 , 3 ) , "LOL" );
-//      
-//      System.out.println( endString );
-
+      calculateReviewScore( calculateWordScores( userReview , movieReviews , movieReviewScores ) , userReview );
       
-      String[] words = formatReview( userInput );
-
       input.close();    
    }
    
    public static String[] formatReview( String userReview )
    {
-	   userReview.toLowerCase();
+	   String[] words = userReview.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");
 	   
-	   String noPunctuationReview = "";
-	     
-	   for( int i = 0; i < userReview.length() ; i++ ) {
-			   System.out.print( userReview.substring( i , i + 1 ) + "- "  );
-
-			   if( !Character.isLetter(userReview.charAt(i)) 
-				&& !Character.isWhitespace(userReview.charAt(i))) {
-				   noPunctuationReview =
-				   userReview.replaceAll( userReview.substring( i , i + 1 ) , "" );
-				   userReview = noPunctuationReview;
-			   }
-			   System.out.println( userReview.substring( i , i + 1 ) + "- "  );
+//	   for(int j = 0; j < words.length ; j++) {
+// 		  System.out.print(words[j] + " "); 		  
+// 	  }
+//	   System.out.println();
+//  
+	   return words;
+   }
+   
+   public static double[] calculateWordScores( String userReview , String[] movieReviews , int[] movieReviewScores) {
+	   double wordScores[] = {};
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   return wordScores;
+   }
+   
+   public static double calculateReviewScore( double[] wordScores , String userReview ) {
+	   double reviewScore = 0;
+	   
+	   String[] wordsInUserReview = formatReview( userReview );
+	   
+	   double minScore = 4 , 		maxScore = 0;
+	   double lowestWordScore = 0 , highestWordScore = 0 ;
+	   String lowestWord = "",		highestWord = "";
+	   
+	   for(int i = 0; i < wordScores.length ; i++) {
+		   if ( wordScores[i] < minScore ) {
+			   minScore = wordScores[i];
+			   lowestWordScore = wordScores[i];
+			   lowestWord = wordsInUserReview[i];
 		   }
-		   System.out.println( userReview );
+		   
+		   if ( wordScores[i] > maxScore ) {
+			   maxScore = wordScores[i];
+			   highestWordScore = wordScores[i];
+			   highestWord = wordsInUserReview[i];
+		   }
+		   
+		   reviewScore += wordScores[i];
+	   }
 	   
-	   return noPunctuationReview.split(" ");
-	   // Yay!
+	   
+	   System.out.println("The score of your review is " + (reviewScore / wordScores.length) );
+	   
+	   if ((reviewScore / wordScores.length) < 1.99 )
+			System.out.println("The overall sentiment of your review is negative." );
+	   else if ((reviewScore / wordScores.length) < 2.009 )
+			System.out.println("The overall sentiment of your review is neutral." );
+	   else
+			System.out.println("The overall sentiment of your review is positive." );
+
+	   System.out.println("The most positive word in your review is " + highestWord +
+			   			  " with a score of " + highestWordScore + "." );
+	   System.out.println("The most negative word in your review is " + lowestWord + 
+			   			  " with a score of " + lowestWordScore + "." );
+	   	   
+	   return reviewScore; // Yay this is all done
    }
 }
 
